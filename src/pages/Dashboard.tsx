@@ -82,7 +82,7 @@ export default function Dashboard() {
             pb="4"
           >
             <Text fontSize="lg" mb="4">
-              Incretos da semana
+              Inscritos da semana
             </Text>
             <Charts options={options} series={series} type="area" height={160} />
           </Box>
