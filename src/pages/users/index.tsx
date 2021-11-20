@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { 
   Box, 
@@ -23,14 +24,15 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { RiAddLine } from "react-icons/ri";
 import { Pagination } from "../../components/Pagination";
-import { useUsers } from "../../service/hooks/UseUsers";
-import { QueryClient } from "react-query";
+import { getUsers, useUsers } from "../../service/hooks/UseUsers";
 import { queryClient } from "../../service/queryClient";
 import { api } from "../../service/api";
 
-export default function UserList() {
+export default function UserList({ users }) {
   const [page, setPage] = useState(1);
-  const { data, isLoading, error, isFetching } = useUsers(page);
+  const { data, isLoading, error, isFetching } = useUsers(page, {
+    initialData: users,
+  });
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -128,4 +130,14 @@ export default function UserList() {
       </Flex>
     </Box>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount } = await getUsers(1);
+  
+  return {
+    props: {
+      users
+    }
+  }
 }
