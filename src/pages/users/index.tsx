@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { 
   Box, 
   Button, 
@@ -25,7 +25,8 @@ import { Pagination } from "../../components/Pagination";
 import { useUsers } from "../../service/hooks/UseUsers";
 
 export default function UserList() {
-  const { data, isLoading, error, isFetching } = useUsers();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, error, isFetching } = useUsers(page);
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -81,7 +82,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map(user => {
+                  {data.users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
@@ -101,9 +102,9 @@ export default function UserList() {
               </Table>
 
               <Pagination
-                totalCountRegister={200}
-                currentPage={5}
-                onPageChange={() => {}}
+                totalCountRegister={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
               />
             </>
           )}
